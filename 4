@@ -1,0 +1,21 @@
+from gensim.models import Word2Vec
+# Training small local data (offline embeddings)
+data = [
+ ["natural","disaster","earthquake","flood","cyclone","tsunami"],
+ ["earthquake","damage","buildings","people"],
+ ["flood","rain","water","loss"],
+ ["cyclone","storm","wind","destruction"]
+]
+model = Word2Vec(data, vector_size=50, min_count=1)
+original = "write an essay on natural disaster"
+# Get similar words using embeddings
+similar = [w for w, s in model.wv.most_similar("disaster", topn=3)]
+enriched = original + " including " + ", ".join(similar)
+def generate(text):
+ return text + ". Natural disasters cause damage to life and property. " \
+ "Examples are earthquake, flood and cyclone."
+resp1 = generate(original)
+resp2 = generate(enriched)
+print("Original Output:\n", resp1)
+print("\nEnriched Output:\n", resp2)
+print("\nWord Count:", len(resp1.split()), "vs", len(resp2.split()))
